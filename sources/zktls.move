@@ -61,3 +61,40 @@ public struct PrimusZKTLS has key {
     _attestorsMapping: Table<address, Attestor>, // Table to store attestors for each address
     _attestors: vector<Attestor>, // To store attestors
 }
+
+// === APIs ===
+
+// Creates a new Primus ZKTLS
+public fun createPrimusZktls(_owner: address, ctx: &mut TxContext) {
+    let zktls = new(_owner, ctx);
+    transfer::share_object(zktls)
+}
+
+fun new(_owner: address, ctx: &mut TxContext): PrimusZKTLS {
+    let mut zktls = PrimusZKTLS {
+        id: object::new(ctx),
+        _attestorsMapping: table::new(ctx),
+        _attestors: vector::empty(),
+    };
+
+    initialize(&mut zktls, _owner);
+
+    zktls
+}
+
+/// @dev initialize function to set the owner of the contract.
+/// This function is called during the contract deployment.
+fun initialize(zktls: &mut PrimusZKTLS, _owner: address) {
+    setupDefaultAttestor(zktls, _owner);
+}
+
+fun setupDefaultAttestor(zktls: &mut PrimusZKTLS, defaultAddr: address) {
+    // !todo! require(defaultAddr != address(0), "Invalid address");
+
+    let attestor = Attestor {
+        attestorAddr: defaultAddr,
+        url: string::utf8(b"https://primuslabs.xyz/"),
+    };
+    table::add(&mut zktls._attestorsMapping, defaultAddr, attestor);
+    vector::push_back(&mut zktls._attestors, attestor)
+}
