@@ -1,18 +1,23 @@
-/*
+#[allow(unused_use)]
+
 #[test_only]
 module primus::primus_tests;
-// uncomment this line to import the module
-// use primus::zktls;
 
-const ENotImplemented: u64 = 0;
+use primus::zktls;
+use sui::test_scenario;
 
 #[test]
 fun test_zktls() {
-    // pass
-}
+    let owner = @0xC0FFEE;
+    let user1 = @0xA1;
 
-#[test, expected_failure(abort_code = ::primus::primus_tests::ENotImplemented)]
-fun test_zktls_fail() {
-    abort ENotImplemented
+    let mut scenario_val = test_scenario::begin(user1);
+    let scenario = &mut scenario_val;
+
+    test_scenario::next_tx(scenario, owner);
+    {
+        zktls::createPrimusZktls(owner, test_scenario::ctx(scenario));
+    };
+
+    test_scenario::end(scenario_val);
 }
-*/
