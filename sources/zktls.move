@@ -4,6 +4,8 @@ module primus::zktls;
 use std::string;
 use sui::table::{Self, Table};
 
+const EInvalidAddress: u64 = 0x1001;
+
 // === Structs ===
 
 /// @dev Structure representing an attestation, which is a signed statement of fact.
@@ -89,7 +91,7 @@ fun initialize(zktls: &mut PrimusZKTLS, _owner: address) {
 }
 
 fun setupDefaultAttestor(zktls: &mut PrimusZKTLS, defaultAddr: address) {
-    // !todo! require(defaultAddr != address(0), "Invalid address");
+    assert!(defaultAddr != @0x0, EInvalidAddress);
 
     let attestor = Attestor {
         attestorAddr: defaultAddr,
