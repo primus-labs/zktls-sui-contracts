@@ -2,20 +2,6 @@ module primus::utils;
 
 use sui::ecdsa_k1;
 
-/// Convert u64 to bytes in big endian
-public fun u64_to_bytes(value: u64): vector<u8> {
-    let mut bytes = vector::empty<u8>();
-    vector::push_back(&mut bytes, ((value >> 56) & 0xFF) as u8);
-    vector::push_back(&mut bytes, ((value >> 48) & 0xFF) as u8);
-    vector::push_back(&mut bytes, ((value >> 40) & 0xFF) as u8);
-    vector::push_back(&mut bytes, ((value >> 32) & 0xFF) as u8);
-    vector::push_back(&mut bytes, ((value >> 24) & 0xFF) as u8);
-    vector::push_back(&mut bytes, ((value >> 16) & 0xFF) as u8);
-    vector::push_back(&mut bytes, ((value >> 8) & 0xFF) as u8);
-    vector::push_back(&mut bytes, (value & 0xFF) as u8);
-    bytes
-}
-
 /// Ref: https://github.com/MystenLabs/sui/blob/main/examples/move/crypto/ecdsa_k1/sources/example.move
 /// Recover the Ethereum address using the signature and message, assuming
 /// the signature was produced over the Keccak256 hash of the message.

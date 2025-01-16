@@ -2,6 +2,7 @@ module primus::zktls;
 
 use primus::utils;
 use std::string::{Self, as_bytes, into_bytes};
+use sui::bcs;
 use sui::event;
 use sui::hash::keccak256;
 use sui::table::{Self, Table};
@@ -272,6 +273,9 @@ public fun encodeAttestation(attestation: Attestation): vector<u8> {
 }
 
 public fun encodeAttestationWithoutHash(attestation: Attestation): vector<u8> {
+    let mut timestamp = bcs::to_bytes(&attestation.timestamp);
+    timestamp.reverse();
+
     let mut encode_data = vector::empty<u8>();
 
     vector::append(&mut encode_data, attestation.recipient);
@@ -279,7 +283,7 @@ public fun encodeAttestationWithoutHash(attestation: Attestation): vector<u8> {
     vector::append(&mut encode_data, encodeResponse(attestation.reponseResolve));
     vector::append(&mut encode_data, into_bytes(attestation.data));
     vector::append(&mut encode_data, into_bytes(attestation.attConditions));
-    vector::append(&mut encode_data, utils::u64_to_bytes(attestation.timestamp));
+    vector::append(&mut encode_data, timestamp);
     vector::append(&mut encode_data, into_bytes(attestation.additionParams));
 
     encode_data
