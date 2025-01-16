@@ -80,7 +80,7 @@ fun create_simple_attestation(
         responses,
         b"data".to_string(),
         b"attConditions".to_string(),
-        0x1234567890abcdef,
+        0x1234567890abcd,
         b"additionParams".to_string(),
         vector[],
         signatures,
@@ -111,7 +111,7 @@ fun test_zktls_encode_attestation() {
     let attestation = create_simple_attestation(request, responses, vector[x"00"]);
 
     let hash = zktls::encodeAttestation(attestation);
-    assert!(hash == x"3fb07c6d8d8c2870cd1b57fe65cf97426760716f965b4769ef5d7eec90d3489d", 0);
+    assert!(hash == x"0f09a2e1f589ab0f110826916f6c1d60b87c9ed9b30905fedc904ef0ab73447d", 0);
 }
 
 #[test]
@@ -168,7 +168,7 @@ fun test_zktls() {
     {
         let mut signatures = vector<vector<u8>>[];
         let signature =
-            x"8df749a149333d8a8ed2da1e943c13fdf857150d9816a675b2d542e2904d263d6beddfe207e39bd7ceca35f5d3f13bebef094861ad538e8288d53cd7234267281b";
+            x"0f3e8bb94995df52b1a454f9a96e3a62f9c0446c8fa2ead68007f6dc11b7dadf3cd24e5ed0ce4573e6097c601d6a8636d234964d974f1a91a8f03ab6040114931b";
         signatures.push_back(signature);
 
         let request = create_simple_request();
